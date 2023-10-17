@@ -22,7 +22,11 @@ def ex2():
 
 # Write a script that receives two strings and prints the number of occurrences of the first string in the second.
 def ex3(first, second):
-    print(second.count(first))
+    occurrence = 0
+    for index_substring in range(0, len(second) - len(first) + 1):
+        if second[index_substring:len(first) + index_substring] == first:
+            occurrence += 1
+    print(occurrence)
 
 
 # Write a script that converts a string of characters written in UpperCamelCase into lowercase_with_underscores.
