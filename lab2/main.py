@@ -42,7 +42,7 @@ def ex2(initial_list: list[int]) -> list[int]:
 # b, a - b, b - a)
 def ex3(a: list, b: list) -> tuple[list, list, list, list]:
     intersection = list(set.intersection(set(a), set(b)))
-    union = list(set().union(set(a), set(b)))
+    union = list(set.union(set(a), set(b)))
     a_minus_b = list(set(a).difference(set(b)))
     b_minus_a = list(set(b).difference(set(a)))
 
@@ -93,6 +93,44 @@ def ex6(lists: list[list], x: int) -> list:
     return result
 
 
+# Write a function that receives as parameter a list of numbers (integers) and will return a tuple with 2 elements.
+# The first element of the tuple will be the number of palindrome numbers found in the list and the second element
+# will be the greatest palindrome number.
+def ex7(numbers: list[int]) -> tuple[int, int]:
+    no_pal: int = 0
+    biggest_pal: int = -1
+    for number in numbers:
+        if str(number) == str(number)[::-1]:
+            no_pal += 1
+            if number > biggest_pal:
+                biggest_pal = number
+    return no_pal, biggest_pal
+
+
+# Write a function that receives a number x, default value equal to 1, a list of strings, and a boolean flag set to
+# True. For each string, generate a list containing the characters that have the ASCII code divisible by x if the
+# flag is set to True, otherwise it should contain characters that have the ASCII code not divisible by x.
+# Example:x = 2, ["test", "hello", "lab002"], flag = False  ????????????????????????????????????????????????????????????
+def ex8(strings: list[str], x: int = None, flag: bool = None):
+    if x is None:
+        x = 2
+    if flag is None:
+        flag = True
+    result = []
+    for string in strings:
+        current_result = []
+        for char in string:
+            if ord(char) % x == 0 if flag else ord(char) % x != 0:
+                current_result.append(char)
+        if current_result:
+            result.append(current_result)
+    return result
+
+
+def ex9():
+    pass
+
+
 if __name__ == '__main__':
     # print(ex1(8))
     # print(ex2([7, 4, 2, 1, 235, 35, 3, 7, 88, 2, 0, 1, 15, 16, 17, 80, 81, 82, 97]))
@@ -103,4 +141,6 @@ if __name__ == '__main__':
     #            [5, 5, 2, 5],
     #            [6, 6, 7, 6]]))
     # print(ex6([[1, 2, 3], [2, 3, 4], [4, 5, 6], [4, 1, "test"]], 2))
+    # print(ex7([5, 67, 767, 1001, 2, 1002, 111]))
+    print(ex8(["test", "hello", "lab002"], 2, False))
     pass
