@@ -151,20 +151,20 @@ def ex9(matrix: list[list[int]]) -> list[tuple[int, int]]:
 # etc. Example: for lists [1,2,3], [5,6,7], ["a", "b", "c"] return: [(1, 5, "a ") ,(2, 6, "b"), (3,7, "c")]. Note: If
 # input lists do not have the same number of items, missing items will be replaced with None to be able to generate
 # max ([len(x) for x in input_lists]) tuples.
-def ex10(*args):
+def ex10(*args: list) -> list[tuple]:
     return list(tuple(arg[i] if len(arg) > i else None for arg in args) for i in range(max(len(arg) for arg in args)))
 
 
 # Write a function that will order a list of string tuples based on the 3rd character of the 2nd element in the
 # tuple. Example: ('abc', 'bcd'), ('abc', 'zza')] ==> [('abc', 'zza'), ('abc', 'bcd')]
-def ex11(string_list):
+def ex11(string_list: list[tuple[str, str]]) -> list[tuple[str, str]]:
     return sorted(string_list, key=lambda x: x[1][2])
 
 
 # Write a function that will receive a list of words as parameter and will return a list of lists of words,
 # grouped by rhyme. Two words rhyme if both of them end with the same 2 letters. Example: group_by_rhyme(['ana',
 # 'banana', 'carte', 'arme', 'parte']) will return [['ana', 'banana'], ['carte', 'parte'], ['arme']]
-def ex12(words):
+def ex12(words: list[str]) -> list[list[str]]:
     result = {}
     for word in words:
         if word[-2:] in result:
