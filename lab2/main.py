@@ -140,7 +140,7 @@ def ex9(matrix: list[list[int]]) -> list[tuple[int, int]]:
     for j in range(m):
         tallest = matrix[0][j]
         for i in range(1, n):
-            if matrix[i][j] <= tallest:
+            if matrix[i][j] < tallest:
                 result.append((i, j))
             tallest = max(tallest, matrix[i][j])
     return result
