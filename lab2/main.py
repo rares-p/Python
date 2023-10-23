@@ -127,8 +127,51 @@ def ex8(strings: list[str], x: int = None, flag: bool = None):
     return result
 
 
-def ex9():
-    pass
+# Write a function that receives as parameter a matrix which represents the heights of the spectators in a stadium and
+# will return a list of tuples (line, column) each one representing a seat of a spectator which can't see the game. A
+# spectator can't see the game if there is at least one taller spectator standing in front of him. All the seats are
+# occupied. All the seats are at the same level. Row and column indexing starts from 0, beginning with the closest
+# row from the field. Example: FIELD [[1, 2, 3, 2, 1, 1], [2, 4, 4, 3, 7, 2], [5, 5, 2, 5, 6, 4], [6, 6, 7, 6, 7, 5]]
+# Will return : [(2, 2), (3, 4), (2, 4)]
+def ex9(matrix: list[list[int]]) -> list[tuple[int, int]]:
+    n = len(matrix)
+    m = len(matrix[0])
+    result = []
+    for j in range(m):
+        tallest = matrix[0][j]
+        for i in range(1, n):
+            if matrix[i][j] <= tallest:
+                result.append((i, j))
+            tallest = max(tallest, matrix[i][j])
+    return result
+
+
+# Write a function that receives a variable number of lists and returns a list of tuples as follows: the first tuple
+# contains the first items in the lists, the second element contains the items on the position 2 in the lists,
+# etc. Example: for lists [1,2,3], [5,6,7], ["a", "b", "c"] return: [(1, 5, "a ") ,(2, 6, "b"), (3,7, "c")]. Note: If
+# input lists do not have the same number of items, missing items will be replaced with None to be able to generate
+# max ([len(x) for x in input_lists]) tuples.
+def ex10(*args):
+    return list(tuple(arg[i] if len(arg) > i else None for arg in args) for i in range(max(len(arg) for arg in args)))
+
+
+# Write a function that will order a list of string tuples based on the 3rd character of the 2nd element in the
+# tuple. Example: ('abc', 'bcd'), ('abc', 'zza')] ==> [('abc', 'zza'), ('abc', 'bcd')]
+def ex11(string_list):
+    return sorted(string_list, key=lambda x: x[1][2])
+
+
+# Write a function that will receive a list of words as parameter and will return a list of lists of words,
+# grouped by rhyme. Two words rhyme if both of them end with the same 2 letters. Example: group_by_rhyme(['ana',
+# 'banana', 'carte', 'arme', 'parte']) will return [['ana', 'banana'], ['carte', 'parte'], ['arme']]
+def ex12(words):
+    result = {}
+    for word in words:
+        if word[-2:] in result:
+            result[word[-2:]].append(word)
+        else:
+            result[word[-2:]] = [word]
+    return list(result.values())
 
 
 if __name__ == '__main__':
@@ -142,5 +185,9 @@ if __name__ == '__main__':
     #            [6, 6, 7, 6]]))
     # print(ex6([[1, 2, 3], [2, 3, 4], [4, 5, 6], [4, 1, "test"]], 2))
     # print(ex7([5, 67, 767, 1001, 2, 1002, 111]))
-    print(ex8(["test", "hello", "lab002"], 2, False))
+    # print(ex8(["test", "hello", "lab002"], 2, False))
+    # print(ex9([[1, 2, 3, 2, 1, 1], [2, 4, 4, 3, 7, 2], [5, 5, 2, 5, 6, 4], [6, 6, 7, 6, 7, 5]]))
+    # print(ex10([1, 2, 3], [5, 6, 7], ["a", "b", "c"]))
+    # print(ex11([('abc', 'bcd'), ('abc', 'zza')]))
+    # print(ex12(['ana', 'banana', 'carte', 'arme', 'parte']))
     pass
