@@ -41,10 +41,50 @@ def ex2(initial_list: list[int]) -> list[int]:
 # Write a function that receives as parameters two lists a and b and returns: (a intersected with b, a reunited with
 # b, a - b, b - a)
 def ex3(a: list, b: list) -> tuple[list, list, list, list]:
-    intersection = list(set.intersection(set(a), set(b)))
-    union = list(set.union(set(a), set(b)))
-    a_minus_b = list(set(a).difference(set(b)))
-    b_minus_a = list(set(b).difference(set(a)))
+    intersection = []
+    b_map = {}
+    for x in b:
+        if x in b_map:
+            b_map[x] += 1
+        else:
+            b_map[x] = 1
+    b_map_saved = b_map.copy()
+    for x in a:
+        if x in b_map and b_map[x] > 0:
+            intersection.append(x)
+            b_map[x] -= 1
+    union = []
+    for x in a:
+        union.append(x)
+        if x in b_map and b_map[x] > 0:
+            b_map[x] -= 1
+    for x in b:
+        if b_map[x] > 0:
+            b_map[x] -= 1
+            union.append(x)
+    b_map = b_map_saved.copy()
+    a_minus_b = []
+    for x in a:
+        if x not in b_map:
+            a_minus_b.append(x)
+        elif b_map[x] > 0:
+            b_map[x] -= 1
+        else:
+            a_minus_b.append(x)
+    a_map = {}
+    for x in a:
+        if x in a_map:
+            a_map[x] += 1
+        else:
+            a_map[x] = 1
+    b_minus_a = []
+    for x in b:
+        if x not in a_map:
+            b_minus_a.append(x)
+        elif a_map[x] > 0:
+            a_map[x] -= 1
+        else:
+            b_minus_a.append(x)
 
     return intersection, union, a_minus_b, b_minus_a
 
@@ -177,7 +217,7 @@ def ex12(words: list[str]) -> list[list[str]]:
 if __name__ == '__main__':
     # print(ex1(8))
     # print(ex2([7, 4, 2, 1, 235, 35, 3, 7, 88, 2, 0, 1, 15, 16, 17, 80, 81, 82, 97]))
-    # print(ex3([2, 3, 6, 3], [7, 4, 2, 8, 6]))
+    print(ex3([2, 3, 6, 3], [7, 4, 2, 8, 6, 2]))
     # print(ex4(["do", "re", "mi", "fa", "sol"], [1, -3, 4, 2], 2))
     # print(ex5([[1, 2, 3, 2],
     #            [2, 4, 4, 3],
