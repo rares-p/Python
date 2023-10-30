@@ -61,7 +61,7 @@ def ex5(rules, x):
             return False
         if rule[2] not in x[rule[0]][1:-1]:
             return False
-        if not x[rule[0]][::-1].startswith(rule[3]):
+        if not x[rule[0]][::-1].startswith(rule[3][::-1]):
             return False
     return True
     pass
@@ -115,14 +115,14 @@ def ex10(mapping):
 # Write a function that receives a variable number of positional arguments and a variable number of keyword arguments
 # adn will return the number of positional arguments whose values can be found among keyword arguments values. Ex:
 def ex11(*args, **kwargs):
-    return len(set.intersection(set(args), set(kwargs.values())))
+    return sum(x in kwargs.values() for x in args)  # len(set.intersection(set(args), set(kwargs.values())))
 
 
 if __name__ == '__main__':
     # print(ex3({'a': 1, 'b': {2, 3}, 'c': {'x': 4, 'y': {5}}}, {'a': 1, 'b': {3, 2}, 'c': {'x': 4, 'y': {5}}}))
-    print(ex4 ("a", "Hello there", href =" http://python.org ", _class =" my-link ", id= " someid "))
-    # print(ex5({("key1", "", "inside", ""), ("key2", "start", "middle", "winter")},
-    #           {"key1": "come inside, it's too cold out"}))
+    # print(ex4("a", "Hello there", href =" http://python.org ", _class =" my-link ", id= " someid "))
+    print(ex5({("key1", "", "inside", "out"), ("key2", "start", "middle", "winter")},
+              {"key1": "come inside, it's too cold out"}))
     # print(ex6([1, 2, 2, 3, 4, 4, 5]))
     # print(ex7({1, 2}, {2, 3}))
     # print(ex10({'start': 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': '2', '2': '2', 'y': 'start'}))
