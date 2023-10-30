@@ -14,7 +14,8 @@ def ex2(string: str):
         if x in result:
             result[x] += 1
         else:
-            result[x] = 0
+            result[x] = 1
+    return result
 
 
 # Compare two dictionaries without using the operator "==" returning True or False. (Attention, dictionaries must be
@@ -25,13 +26,10 @@ def ex3(a, b):
     if isinstance(a, dict):
         if a.keys() != b.keys():
             return False
-        for x in a.keys():
-            return ex3(a[x], b[x])
+        return all(ex3(a[x], b[x]) for x in a.keys())
     if isinstance(a, list) or isinstance(b, tuple):
         if len(a) != len(b):
-            return False
-        for i in range(len(a)):
-            return ex3(a[i], b[i])
+            return all(ex3(a[i], b[i]) for i in range(len(a)))
     return not (a != b)
 
 
@@ -40,10 +38,10 @@ def ex3(a, b):
 # build_xml_element ("a", "Hello there", href =" http://python.org ", _class =" my-link ", id= " someid ") returns
 # the string = "<a href="http://python.org \ "_class = " my-link \ "id = " someid \ "> Hello there "
 def ex4(tag, content, **kwargs):
-    result = f'<{tag}'
+    result = f'<{tag.strip()}'
     for key, value in kwargs.items():
-        result += f" {key}=\"{value}\""
-    result += f"> {content}"
+        result += f" {key.strip()}=\"{value.strip()}\""
+    result += f">{content.strip()}</{tag.strip()}>"
     return result
 
 
@@ -123,7 +121,8 @@ def ex11(*args, **kwargs):
 
 
 if __name__ == '__main__':
-    # print(ex4 ("a", "Hello there", href =" http://python.org ", _class =" my-link ", id= " someid "))
+    # print(ex3({'a': 1, 'b': {2, 3}, 'c': {'x': 4, 'y': {5}}}, {'a': 1, 'b': {3, 2}, 'c': {'x': 4, 'y': {5}}}))
+    print(ex4 ("a", "Hello there", href =" http://python.org ", _class =" my-link ", id= " someid "))
     # print(ex5({("key1", "", "inside", ""), ("key2", "start", "middle", "winter")},
     #           {"key1": "come inside, it's too cold out"}))
     # print(ex6([1, 2, 2, 3, 4, 4, 5]))
