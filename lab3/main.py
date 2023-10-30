@@ -109,7 +109,7 @@ def ex10(mapping):
         result.append(mapping[key])
         visited.add(key)
         key = mapping[key]
-    return result
+    return result[:-1]
 
 
 # Write a function that receives a variable number of positional arguments and a variable number of keyword arguments
@@ -121,8 +121,8 @@ def ex11(*args, **kwargs):
 if __name__ == '__main__':
     # print(ex3({'a': 1, 'b': {2, 3}, 'c': {'x': 4, 'y': {5}}}, {'a': 1, 'b': {3, 2}, 'c': {'x': 4, 'y': {5}}}))
     # print(ex4("a", "Hello there", href =" http://python.org ", _class =" my-link ", id= " someid "))
-    print(ex5({("key1", "", "inside", "out"), ("key2", "start", "middle", "winter")},
-              {"key1": "come inside, it's too cold out"}))
+    # print(ex5({("key1", "", "inside", "out"), ("key2", "start", "middle", "winter")},
+    #           {"key1": "come inside, it's too cold out"}))
     # print(ex6([1, 2, 2, 3, 4, 4, 5]))
     # print(ex7({1, 2}, {2, 3}))
     # print(ex10({'start': 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': '2', '2': '2', 'y': 'start'}))
