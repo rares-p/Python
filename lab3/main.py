@@ -71,7 +71,63 @@ def ex5(rules, x):
     pass
 
 
+# Write a function that receives as a parameter a list and returns a tuple (a, b), representing the number of unique
+# elements in the list, and b representing the number of duplicate elements in the list.
+def ex6(elem):
+    a = 0
+    b = 0
+    for x in set(elem):
+        if elem.count(x) > 1:
+            b += 1
+        else:
+            a += 1
+    return a, b
+
+
+# Write a function that receives a variable number of sets and returns a dictionary with the following operations
+# from all sets two by two: reunion, intersection, a-b, b-a. The key will have the following form: "a op b",
+# where a and b are two sets, and op is the applied operator: |, &, -.
+def ex7(*args):
+    result = {}
+    for a in args:
+        for b in args:
+            if a is not b:
+                result[f"{str(a)} | {str(b)}"] = set.union(a, b)
+                result[f"{str(a)} & {str(b)}"] = set.intersection(a, b)
+                result[f"{str(a)} - {str(b)}"] = set.difference(a, b)
+                # result[f"{str(b)} - {str(a)}"] = set.difference(b, a) - nu este nevoie de b - a
+    return result
+
+
+# Write a function that receives a single dict parameter named mapping. This dictionary always contains a string key
+# "start". Starting with the value of this key you must obtain a list of objects by iterating over mapping in the
+# following way: the value of the current key is the key for the next value, until you find a loop (a key that was
+# visited before). The function must return the list of objects obtained as previously described. Ex: loop({'start':
+# 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': '2', '2': '2', 'y': 'start'}) will return ['a', '6', 'z', '2']
+# de ce nu ['a', '6', 'z', '2', '2']
+def ex10(mapping):
+    key = 'start'
+    visited = set()
+    result = []
+    while key not in visited:
+        result.append(mapping[key])
+        visited.add(key)
+        key = mapping[key]
+    return result
+
+
+# Write a function that receives a variable number of positional arguments and a variable number of keyword arguments
+# adn will return the number of positional arguments whose values can be found among keyword arguments values. Ex:
+def ex11(*args, **kwargs):
+    return len(set.intersection(set(args), set(kwargs.values())))
+
+
 if __name__ == '__main__':
     # print(ex4 ("a", "Hello there", href =" http://python.org ", _class =" my-link ", id= " someid "))
-    print(ex5({("key1", "", "inside", ""), ("key2", "start", "middle", "winter")},
-              {"key1": "come inside, it's too cold out"}))
+    # print(ex5({("key1", "", "inside", ""), ("key2", "start", "middle", "winter")},
+    #           {"key1": "come inside, it's too cold out"}))
+    # print(ex6([1, 2, 2, 3, 4, 4, 5]))
+    # print(ex7({1, 2}, {2, 3}))
+    # print(ex10({'start': 'a', 'b': 'a', 'a': '6', '6': 'z', 'x': '2', 'z': '2', '2': '2', 'y': 'start'}))
+    # print(ex11(1, 2, 3, 4, x=1, y=2, z=3, w=5))
+    pass
