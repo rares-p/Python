@@ -30,6 +30,8 @@ def ex3(a, b):
     if isinstance(a, list) or isinstance(b, tuple):
         if len(a) != len(b):
             return all(ex3(a[i], b[i]) for i in range(len(a)))
+    if isinstance(a, set):
+        return (set.symmetric_difference(a, b)) == 0
     return not (a != b)
 
 
