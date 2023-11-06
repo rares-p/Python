@@ -92,7 +92,10 @@ def ex3():
         def transform(self, _lambda):
             for i in range(self.n):
                 for j in range(self.m):
-                    self.__matrix[i][j] = _lambda(self.__matrix[i][j])
+                    try:
+                        self.__matrix[i][j] = _lambda(self.__matrix[i][j])
+                    except Exception as e:
+                        print(f"Eroare: {e}")
 
         def __str__(self):
             return "\n".join(["\t".join(map(str, i)) for i in self.__matrix])
