@@ -67,7 +67,7 @@ def ex3():
 
         def get(self, i, j):
             if i < 0 or j < 0 or i >= self.n or j >= self.m:
-                return None
+                raise Exception("Out of bounds")
             return self.__matrix[i][j]
 
         def set(self, i, j, value):
@@ -82,7 +82,7 @@ def ex3():
 
         def multiply(self, other):
             if self.m != other.n:
-                raise ValueError("Wrong size")
+                raise Exception("Wrong size")
             result = Matrix(self.n, self.m)
             for i in range(self.n):
                 for j in range(self.m):
