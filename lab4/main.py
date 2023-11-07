@@ -10,12 +10,12 @@ def ex1():
 
         def pop(self):
             if len(self.__stack) == 0:
-                return None
+                raise Exception("Stack is empty")
             return self.__stack.pop()
 
         def peek(self):
             if len(self.__stack) == 0:
-                return None
+                raise Exception("Stack is empty")
             return self.__stack[-1]
 
         def isEmpty(self):
@@ -43,12 +43,12 @@ def ex2():
 
         def pop(self):
             if len(self.__queue) == 0:
-                return None
+                raise Exception("Queue is empty")
             return self.__queue.pop(0)
 
         def peek(self):
             if len(self.__queue) == 0:
-                return None
+                raise Exception("Queue is empty")
             return self.__queue[0]
 
         def isEmpty(self):
