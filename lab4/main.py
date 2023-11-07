@@ -16,8 +16,12 @@ def ex1():
                 return None
             return self.__stack[-1]
 
-    # test = Stack()
-    # test.push(1)
+        def isEmpty(self):
+            return len(self.__stack) == 0
+
+        def size(self):
+            return len(self.__stack)
+
     # test.push(2)
     # test.push(3)
     # test.push(4)
@@ -44,6 +48,12 @@ def ex2():
             if len(self.__queue) == 0:
                 return None
             return self.__queue[0]
+
+        def isEmpty(self):
+            return len(self.__queue) == 0
+
+        def size(self):
+            return len(self.__queue)
 
     # test = Queue()
     # test.push(1)
@@ -99,6 +109,9 @@ def ex3():
 
         def __str__(self):
             return "\n".join(["\t".join(map(str, i)) for i in self.__matrix])
+
+        def size(self):
+            return self.n, self.m
 
 
 if __name__ == '__main__':
