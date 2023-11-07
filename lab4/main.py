@@ -1,3 +1,5 @@
+import copy
+
 def ex1():
     class Stack:
         def __init__(self):
@@ -71,6 +73,8 @@ def ex3():
         def __init__(self, n, m):
             if n < 0 or m < 0:
                 raise Exception("Wrong size")
+            if type(n) != int or type(m) != int:
+                raise Exception("Only integers can be passed as size")
             self.n = n
             self.m = m
             self.__matrix = [[0 for j in range(m)] for i in range(n)]
@@ -78,10 +82,12 @@ def ex3():
         def get(self, i, j):
             if i < 0 or j < 0 or i >= self.n or j >= self.m:
                 raise Exception("Out of bounds")
+            if type(i) != int or type(j) != int:
+                raise Exception("Only integers can be passed as parameters")
             return self.__matrix[i][j]
 
         def set(self, i, j, value):
-            self.__matrix[i][j] = value
+            self.__matrix[i][j] = copy.deepcopy(value)
 
         def transpose(self):
             transposed = Matrix(self.m, self.n)
