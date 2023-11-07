@@ -6,7 +6,7 @@ def ex1():
             self.__stack = []
 
         def push(self, x):
-            self.__stack.append(x)
+            self.__stack.append(copy.deepcopy(x))
 
         def pop(self):
             if len(self.__stack) == 0:
@@ -39,7 +39,7 @@ def ex2():
             self.__queue = []
 
         def push(self, x):
-            self.__queue.append(x)
+            self.__queue.append(copy.deepcopy(x))
 
         def pop(self):
             if len(self.__queue) == 0:
