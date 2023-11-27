@@ -30,7 +30,8 @@
 #                 print(f"File '{file_name}' not found.")
 #             except IOError as e:
 #                 print(f"Error reading '{file_name}': {e}")
-#
+#     except NotADirectoryError as e:
+#         print(e)
 #     except FileNotFoundError as e:
 #         print(e)
 #     except ValueError as e:
@@ -74,7 +75,8 @@
 #                 os.rename(file_path, new_file_path)
 #             except OSError as e:
 #                 print(f"Error renaming '{file_name}': {e}")
-#
+#     except NotADirectoryError as e:
+#         print(e)
 #     except FileNotFoundError as e:
 #         print(e)
 #     except Exception as e:
@@ -152,6 +154,8 @@
 #             for extension, count in ext.items():
 #                 print(f"{extension}: {count}")
 #
+#     except NotADirectoryError as e:
+#         print(e)
 #     except FileNotFoundError as e:
 #         print(e)
 #     except PermissionError as e:
