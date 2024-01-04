@@ -22,13 +22,17 @@ def read_input(args):
         print("Height or with cannot be less than 4")
         exit(-1)
     first_player = None
-    if opponent_type == "human" and size == 5:
-        print("First player specification is redundant since the opponent is human.\n")
+    if opponent_type == "human":
+        if size == 5:
+            print("First player specification is redundant since the opponent is human.\n")
     elif size == 5:
         first_player = args[4]
+        if first_player not in ["human", "computer"]:
+            print("First player types are: 'human'/'computer'")
+            exit(-1)
 
     return opponent_type, width, height, first_player
 
 
 if __name__ == '__main__':
-    data = read_input(sys.argv)
+    opponent, w, h, first = read_input(sys.argv)
