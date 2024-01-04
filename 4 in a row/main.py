@@ -1,4 +1,10 @@
 import sys
+import time
+
+import pygame
+
+BLUE = (50, 98, 168)
+BEIGE = (250, 233, 177)
 
 
 def read_input(args):
@@ -13,8 +19,8 @@ def read_input(args):
         print("Incorrect opponent type. Available types are: human/computer1/computer2/computer3 (where 1 2 3 are "
               "difficulties in ascending order)")
         exit(-1)
-    width = args[2]
-    height = args[3]
+    width = int(args[2])
+    height = int(args[3])
     if not isinstance(width, int) or not isinstance(height, int):
         print("Only integers allowed for width and height")
         exit(-1)
@@ -34,5 +40,42 @@ def read_input(args):
     return opponent_type, width, height, first_player
 
 
+class FourInARow:
+    def __init__(self, opponent_type: str, width: int, height: int, first_player: str):
+        self.screen = None
+        self.first_player = None
+        self.second_player = None
+        self.width = width
+        self.height = height
+        self.window_scale = 100
+        self.header = 1
+        self.margin = 10
+        self.window_header = self.header * self.window_scale
+        self.window_width = self.width * self.window_scale
+        self.window_height = self.height * self.window_scale + self.window_header
+        if opponent_type.startswith("computer"):
+            if first_player == "human":
+                self.first_player = "Your"  # TODO: DE VAZUT DACA SA RAMANA ASA
+                self.second_player = "Computer's"
+            else:
+                self.first_player = ""
+        self.initial_setup()
+
+    def initial_setup(self):
+        scale = 100
+        pygame.init()
+        self.screen = pygame.display.set_mode((self.window_width, self.window_height))
+        self.screen.fill(BLUE)
+        pygame.draw.rect(self.screen, BEIGE, (0, 0, self.window_width, self.window_header))
+        pygame.display.set_caption("4 in a row")
+        for i in range(self.width):
+            for j in range(self.header, self.height + self.header):
+                pygame.draw.circle(self.screen, BEIGE, (i * scale + scale // 2, j * scale + scale // 2),
+                                   scale / 2 - self.margin)
+        pygame.display.update()
+        time.sleep(2)
+
+
 if __name__ == '__main__':
     opponent, w, h, first = read_input(sys.argv)
+    instance = FourInARow(opponent, w, h, first)
