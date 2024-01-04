@@ -1,7 +1,10 @@
+import copy
 import sys
 import time
 
 import pygame
+
+from minmax import MinMax
 
 BLUE = (50, 98, 168)
 BEIGE = (250, 233, 177)
@@ -44,7 +47,7 @@ def read_input(args):
 
 class FourInARow:
     def __init__(self, opponent_type: str, width: int, height: int, first_player: str):
-        self.opponent_type = opponent_type
+        self.opponent_type = "human" if opponent_type == "human" else "computer"
         self.screen = None
         self.font = None
         self.first_player = None
@@ -55,15 +58,13 @@ class FourInARow:
         self.header = 1
         self.margin = 10
         self.board = [[None for _ in range(width)] for _ in range(height)]
+        if self.opponent_type == "computer":
+            self.minmax = MinMax(self.board, opponent_type[-1])
+            if first_player == "computer":
+                self.first_player = "computer"
         self.window_header = self.header * self.window_scale
         self.window_width = self.width * self.window_scale
         self.window_height = self.height * self.window_scale + self.window_header
-        if opponent_type.startswith("computer"):
-            if first_player == "human":
-                self.first_player = "Your"  # TODO: DE VAZUT DACA SA RAMANA ASA
-                self.second_player = "Computer's"
-            else:
-                self.first_player = ""
         self.initial_setup()
 
     def initial_setup(self):
@@ -82,7 +83,6 @@ class FourInARow:
         self.run()
 
     def move(self, x, opp):
-        print(self.board)
         y = None
         for i in range(self.height - 1, -1, -1):
             if self.board[i][x] is None:
@@ -90,9 +90,7 @@ class FourInARow:
                 break
         if y is None:
             return -1
-        print(y)
         self.board[y][x] = opp
-        print(self.board)
         color = YELLOW if opp == 0 else RED
         pygame.draw.circle(self.screen, color, (
             x * self.window_scale + self.window_scale // 2,
@@ -120,17 +118,28 @@ class FourInARow:
         running = True
         turn = 0
         self.update_turn_text(turn)
+        if self.first_player == "computer":
+            turn = 1
+            self.minmax.board = copy.deepcopy(self.board)
+            best_pc = self.minmax.get_best_move()
+            self.move(best_pc, turn)
+            turn = 1 - turn
+            self.update_turn_text(turn)
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        print("Mouse clicked at:", event.pos)
                         if self.move(event.pos[0] // self.window_scale, turn) != -1:
                             turn = 1 - turn
                             self.update_turn_text(turn)
-                            print(self.board)
+                            if self.opponent_type.startswith("computer"):
+                                self.minmax.board = copy.deepcopy(self.board)
+                                best_pc = self.minmax.get_best_move()
+                                self.move(best_pc, turn)
+                                turn = 1 - turn
+                                self.update_turn_text(turn)
 
         pygame.display.update()
 
