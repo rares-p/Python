@@ -4,7 +4,7 @@ import sys
 PLAYER = 0
 COMPUTER = 1
 DEPTHS = [1, 3, 6]
-WEIGHTS = [0, 1, 4, 27, 1000000]
+WEIGHTS = [0, 3, 30, 75, 170]
 
 
 def is_game_over(board):
@@ -54,9 +54,9 @@ class MinMax:
                 values = [board[i + k][j + k] for k in range(4)]
                 if PLAYER in values:
                     if not (COMPUTER in values):
-                        rez -= values.count(PLAYER) ** 3
+                        rez -= WEIGHTS[values.count(PLAYER)]
                 else:
-                    rez += values.count(COMPUTER) ** 3
+                    rez += WEIGHTS[values.count(COMPUTER)]
 
         # secondary diag
         for i in range(self.height - 3):
@@ -64,9 +64,9 @@ class MinMax:
                 values = [board[i + k][j - k] for k in range(4)]
                 if PLAYER in values:
                     if not (COMPUTER in values):
-                        rez -= values.count(PLAYER) ** 3
+                        rez -= WEIGHTS[values.count(PLAYER)]
                 else:
-                    rez += values.count(COMPUTER) ** 3
+                    rez += WEIGHTS[values.count(COMPUTER)]
 
         # vertical
         for i in range(self.height - 3):
@@ -74,9 +74,9 @@ class MinMax:
                 values = [board[i + k][j] for k in range(4)]
                 if PLAYER in values:
                     if not (COMPUTER in values):
-                        rez -= values.count(PLAYER) ** 3
+                        rez -= WEIGHTS[values.count(PLAYER)]
                 else:
-                    rez += values.count(COMPUTER) ** 3
+                    rez += WEIGHTS[values.count(COMPUTER)]
 
         # horizontal
         for i in range(self.height):
@@ -84,9 +84,9 @@ class MinMax:
                 values = [board[i][j + k] for k in range(4)]
                 if PLAYER in values:
                     if not (COMPUTER in values):
-                        rez -= values.count(PLAYER) ** 3
+                        rez -= WEIGHTS[values.count(PLAYER)]
                 else:
-                    rez += values.count(COMPUTER) ** 3
+                    rez += WEIGHTS[values.count(COMPUTER)]
         return rez
 
     def get_next_moves(self, board, turn):
@@ -98,7 +98,7 @@ class MinMax:
                     new_board[i][j] = turn
                     boards.append((new_board, j))
                     break
-        return boards
+        return sorted(boards, key=lambda x: self.evaluate(x[0]))
 
     def get_best_move(self):
         best_move_index = -1
