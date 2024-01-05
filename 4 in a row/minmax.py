@@ -3,7 +3,7 @@ import sys
 
 PLAYER = 0
 COMPUTER = 1
-DEPTHS = [1, 3, 6]
+DEPTHS = [0, 3, 6]
 WEIGHTS = [0, 3, 30, 75, 170]
 
 
