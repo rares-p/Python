@@ -112,6 +112,7 @@ class FourInARow:
         else:
             display_text = f"Player{opp + 1}'s Turn"
         self.display_text(display_text, color)
+        pygame.display.update()
 
     def display_text(self, display_text, color):
         pygame.draw.rect(self.screen, BEIGE, (0, 0, self.window_width, self.window_header))
@@ -147,6 +148,7 @@ class FourInARow:
             best_pc = self.minmax.get_best_move()
             self.move(best_pc, turn)
             turn = 1 - turn
+            self.update_turn_text(turn)
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
