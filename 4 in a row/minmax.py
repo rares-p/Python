@@ -4,6 +4,38 @@ import sys
 PLAYER = 0
 COMPUTER = 1
 DEPTHS = [1, 3, 6]
+WEIGHTS = [0, 1, 4, 27, 1000000]
+
+
+def is_game_over(board):
+    height = len(board)
+    width = len(board[0])
+    for i in range(height - 3):
+        for j in range(width - 3):
+            values = [board[i + k][j + k] for k in range(4)]
+            if values.count(PLAYER) == 4 or values.count(COMPUTER) == 4:
+                return True
+
+    # secondary diag
+    for i in range(height - 3):
+        for j in range(3, width):
+            values = [board[i + k][j - k] for k in range(4)]
+            if values.count(PLAYER) == 4 or values.count(COMPUTER) == 4:
+                return True
+
+    # vertical
+    for i in range(height - 3):
+        for j in range(width):
+            values = [board[i + k][j] for k in range(4)]
+            if values.count(PLAYER) == 4 or values.count(COMPUTER) == 4:
+                return True
+
+    # horizontal
+    for i in range(height):
+        for j in range(width - 3):
+            values = [board[i][j + k] for k in range(4)]
+            if values.count(PLAYER) == 4 or values.count(COMPUTER) == 4:
+                return True
 
 
 class MinMax:
@@ -13,34 +45,6 @@ class MinMax:
         self.width = len(board[0])
         self.depth = DEPTHS[int(level) - 1]
         pass
-
-    def is_game_over(self, board):
-        for i in range(self.height - 3):
-            for j in range(self.width - 3):
-                values = [board[i + k][j + k] for k in range(4)]
-                if values.count(PLAYER) == 4 or values.count(COMPUTER) == 4:
-                    return True
-
-        # secondary diag
-        for i in range(self.height - 3):
-            for j in range(3, self.width):
-                values = [board[i + k][j - k] for k in range(4)]
-                if values.count(PLAYER) == 4 or values.count(COMPUTER) == 4:
-                    return True
-
-        # vertical
-        for i in range(self.height - 3):
-            for j in range(self.width):
-                values = [board[i + k][j] for k in range(4)]
-                if values.count(PLAYER) == 4 or values.count(COMPUTER) == 4:
-                    return True
-
-        # horizontal
-        for i in range(self.height):
-            for j in range(self.width - 3):
-                values = [board[i][j + k] for k in range(4)]
-                if values.count(PLAYER) == 4 or values.count(COMPUTER) == 4:
-                    return True
 
     def evaluate(self, board):
         rez = 0
@@ -107,7 +111,7 @@ class MinMax:
         return best_move_index
 
     def minmax(self, board, depth, alpha, beta, max_player):
-        if depth == 0 or self.is_game_over(board):
+        if depth == 0 or is_game_over(board):
             return self.evaluate(board)
 
         if max_player:
