@@ -4,7 +4,7 @@ import time
 
 import pygame
 
-from minmax import MinMax
+from minmax import MinMax, is_game_over
 
 BLUE = (50, 98, 168)
 BEIGE = (250, 233, 177)
@@ -48,6 +48,7 @@ def read_input(args):
 class FourInARow:
     def __init__(self, opponent_type: str, width: int, height: int, first_player: str):
         self.opponent_type = "human" if opponent_type == "human" else "computer"
+        self.computer = False
         self.screen = None
         self.font = None
         self.first_player = None
@@ -57,8 +58,10 @@ class FourInARow:
         self.window_scale = 100
         self.header = 1
         self.margin = 10
+        self.text_margin = 50
         self.board = [[None for _ in range(width)] for _ in range(height)]
         if self.opponent_type == "computer":
+            self.computer = True
             self.minmax = MinMax(self.board, opponent_type[-1])
             if first_player == "computer":
                 self.first_player = "computer"
@@ -96,11 +99,11 @@ class FourInARow:
             x * self.window_scale + self.window_scale // 2,
             y * self.window_scale + self.window_scale // 2 + self.window_header),
                            self.window_scale / 2 - self.margin)
+        pygame.display.update()
 
     def update_turn_text(self, opp):
         display_text = None
         color = YELLOW if opp == 0 else RED
-        pygame.draw.rect(self.screen, BEIGE, (0, 0, self.window_width, self.window_header))
         if self.opponent_type.startswith("computer"):
             if opp == 0:
                 display_text = "Your Turn"
@@ -108,37 +111,62 @@ class FourInARow:
                 display_text = "Computer's Turn"
         else:
             display_text = f"Player{opp + 1}'s Turn"
+        self.display_text(display_text, color)
+
+    def display_text(self, display_text, color):
+        pygame.draw.rect(self.screen, BEIGE, (0, 0, self.window_width, self.window_header))
         text = self.font.render(display_text, True, color, (10, 10, 10))
         textRect = text.get_rect()
-        textRect.center = (self.window_width // 2 + self.margin, self.window_header // 2)
+        textRect.center = (self.window_width // 2, self.window_header // 2)
         self.screen.blit(text, textRect)
         pygame.display.update()
 
+    def check_game_over(self, turn):
+        if is_game_over(self.board):
+            if turn:
+                if self.computer:
+                    self.display_text("You win!!!", YELLOW)
+                else:
+                    self.display_text("Player 1 wins!!!", YELLOW)
+            else:
+                if self.computer:
+                    self.display_text("Computer wins!!!", RED)
+                else:
+                    self.display_text("Player 2 wins!!!", RED)
+            return True
+
     def run(self):
+        over = False
         running = True
         turn = 0
         self.update_turn_text(turn)
         if self.first_player == "computer":
             turn = 1
+            self.update_turn_text(turn)
             self.minmax.board = copy.deepcopy(self.board)
             best_pc = self.minmax.get_best_move()
             self.move(best_pc, turn)
             turn = 1 - turn
-            self.update_turn_text(turn)
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
+                elif event.type == pygame.MOUSEBUTTONDOWN and not over:
                     if event.button == 1:
                         if self.move(event.pos[0] // self.window_scale, turn) != -1:
                             turn = 1 - turn
+                            if self.check_game_over(turn):
+                                over = True
+                                break
                             self.update_turn_text(turn)
                             if self.opponent_type.startswith("computer"):
                                 self.minmax.board = copy.deepcopy(self.board)
                                 best_pc = self.minmax.get_best_move()
                                 self.move(best_pc, turn)
                                 turn = 1 - turn
+                                if self.check_game_over(turn):
+                                    over = True
+                                    break
                                 self.update_turn_text(turn)
 
         pygame.display.update()
