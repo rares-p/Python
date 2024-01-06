@@ -83,7 +83,6 @@ class FourInARow:
                                                         self.window_scale + self.window_scale // 2),
                                    self.window_scale / 2 - self.margin)
         pygame.display.update()
-        self.run()
 
     def move(self, x, opp):
         y = None
@@ -102,7 +101,6 @@ class FourInARow:
         pygame.display.update()
 
     def update_turn_text(self, opp):
-        display_text = None
         color = YELLOW if opp == 0 else RED
         if self.opponent_type.startswith("computer"):
             if opp == 0:
@@ -170,6 +168,8 @@ class FourInARow:
                                     over = True
                                     break
                                 self.update_turn_text(turn)
+                pygame.event.clear()
+                break
 
         pygame.display.update()
 
@@ -177,3 +177,4 @@ class FourInARow:
 if __name__ == '__main__':
     opponent, w, h, first = read_input(sys.argv)
     instance = FourInARow(opponent, w, h, first)
+    instance.run()
