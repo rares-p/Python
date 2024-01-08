@@ -60,21 +60,21 @@ class FourInARow:
     Class that represents and updates a game session
 
     Attributes:
-        computer (bool): Whether the second players is human or AI
-        screen (window): The pygame window
-        font (font): Font used in the pygame window
-        first_player (str): Who is the first to play in a human vs AI game
-        width (int): The width of the window
-        height (int): The height of the window
-        window_scale (int): The scale of the window
-        header (int): The size of the header
-        margin (int): The margin between cells
-        board (int): The board that represents the current state of the game
-        minmax (MinMax): Object that gives the next move of the AI based on
+        _computer (bool): Whether the second players is human or AI
+        _screen (window): The pygame window
+        _font (font): Font used in the pygame window
+        _first_player (str): Who is the first to play in a human vs AI game
+        _width (int): The width of the window
+        _height (int): The height of the window
+        _window_scale (int): The scale of the window
+        _header (int): The size of the header
+        _margin (int): The margin between cells
+        _board (int): The board that represents the current state of the game
+        _minmax (MinMax): Object that gives the next move of the AI based on
                          difficulty
-        window_header (int): the width of the header in pixels
-        window_width (int): the width of the window in pixels
-        window_height (int): the height of the window in pixels
+        _window_header (int): the width of the header in pixels
+        _window_width (int): the width of the window in pixels
+        _window_height (int): the height of the window in pixels
     """
 
     def __init__(self, opponent_type: str, width: int, height: int,
@@ -87,25 +87,25 @@ class FourInARow:
         :param height: The height of the board in cells
         :param first_player: Who is the first to play in a human vs AI game
         """
-        self.computer = False
-        self.screen = None
-        self.font = None
-        self.first_player = None
-        self.width = width
-        self.height = height
-        self.window_scale = 100
-        self.header = 1
-        self.margin = 10
-        self.board = [[None for _ in range(width)] for _ in range(height)]
+        self._computer = False
+        self._screen = None
+        self._font = None
+        self._first_player = None
+        self._width = width
+        self._height = height
+        self._window_scale = 100
+        self._header = 1
+        self._margin = 10
+        self._board = [[None for _ in range(width)] for _ in range(height)]
         if opponent_type.startswith("computer"):
-            self.computer = True
-            self.minmax = MinMax(self.board, opponent_type[-1])
+            self._computer = True
+            self._minmax = MinMax(self._board, opponent_type[-1])
             if first_player == "computer":
-                self.first_player = "computer"
-        self.window_header = self.header * self.window_scale
-        self.window_width = self.width * self.window_scale
-        self.window_height = (self.height * self.window_scale
-                              + self.window_header)
+                self._first_player = "computer"
+        self._window_header = self._header * self._window_scale
+        self._window_width = self._width * self._window_scale
+        self._window_height = (self._height * self._window_scale
+                               + self._window_header)
         self.initial_setup()
 
     def initial_setup(self):
@@ -114,25 +114,25 @@ class FourInARow:
         """
         pygame.init()
         pygame.display.set_caption("4 in a row")
-        self.font = pygame.font.SysFont("Comic Sans MS", 36)
-        self.screen = pygame.display.set_mode((self.window_width,
-                                               self.window_height))
-        self.screen.fill(BLUE)
-        pygame.draw.rect(self.screen, BEIGE,
-                         (0, 0, self.window_width, self.window_header))
-        for i in range(self.width):
-            for j in range(self.header, self.height + self.header):
-                pygame.draw.circle(self.screen, BEIGE, (i
-                                                        * self.window_scale
-                                                        + self.window_scale
-                                                        // 2,
-                                                        j
-                                                        * self.window_scale
-                                                        + self.window_scale
-                                                        // 2),
-                                   self.window_scale
+        self._font = pygame.font.SysFont("Comic Sans MS", 36)
+        self._screen = pygame.display.set_mode((self._window_width,
+                                                self._window_height))
+        self._screen.fill(BLUE)
+        pygame.draw.rect(self._screen, BEIGE,
+                         (0, 0, self._window_width, self._window_header))
+        for i in range(self._width):
+            for j in range(self._header, self._height + self._header):
+                pygame.draw.circle(self._screen, BEIGE, (i
+                                                         * self._window_scale
+                                                         + self._window_scale
+                                                         // 2,
+                                                         j
+                                                         * self._window_scale
+                                                         + self._window_scale
+                                                         // 2),
+                                   self._window_scale
                                    / 2
-                                   - self.margin)
+                                   - self._margin)
         pygame.display.update()
 
     def move(self, x, opp):
@@ -143,19 +143,19 @@ class FourInARow:
         :param opp: Which player performs the move
         """
         y = None
-        for i in range(self.height - 1, -1, -1):
-            if self.board[i][x] is None:
+        for i in range(self._height - 1, -1, -1):
+            if self._board[i][x] is None:
                 y = i
                 break
         if y is None:
             return -1
-        self.board[y][x] = opp
+        self._board[y][x] = opp
         color = YELLOW if opp == 0 else RED
-        pygame.draw.circle(self.screen, color, (
-            x * self.window_scale + self.window_scale // 2,
-            y * self.window_scale + self.window_scale // 2 +
-            self.window_header),
-                           self.window_scale / 2 - self.margin)
+        pygame.draw.circle(self._screen, color, (
+            x * self._window_scale + self._window_scale // 2,
+            y * self._window_scale + self._window_scale // 2 +
+            self._window_header),
+                           self._window_scale / 2 - self._margin)
         pygame.display.update()
 
     def update_turn_text(self, opp):
@@ -165,7 +165,7 @@ class FourInARow:
         :param opp: The next player to move
         """
         color = YELLOW if opp == 0 else RED
-        if self.computer:
+        if self._computer:
             if opp == 0:
                 display_text = "Your Turn"
             else:
@@ -182,14 +182,14 @@ class FourInARow:
         :param display_text: The text that contains the player to move
         :param color: The color of the player
         """
-        pygame.draw.rect(self.screen, BEIGE, (0,
-                                              0,
-                                              self.window_width,
-                                              self.window_header))
-        text = self.font.render(display_text, True, color, (10, 10, 10))
+        pygame.draw.rect(self._screen, BEIGE, (0,
+                                               0,
+                                               self._window_width,
+                                               self._window_header))
+        text = self._font.render(display_text, True, color, (10, 10, 10))
         textRect = text.get_rect()
-        textRect.center = (self.window_width // 2, self.window_header // 2)
-        self.screen.blit(text, textRect)
+        textRect.center = (self._window_width // 2, self._window_header // 2)
+        self._screen.blit(text, textRect)
         pygame.display.update()
 
     def check_game_over(self, turn):
@@ -199,14 +199,14 @@ class FourInARow:
         :param turn: The next player to move
         :return: True is the game is over, False otherwise
         """
-        if is_game_over(self.board):
+        if is_game_over(self._board):
             if turn:
-                if self.computer:
+                if self._computer:
                     self.display_text("You win!!!", YELLOW)
                 else:
                     self.display_text("Player 1 wins!!!", YELLOW)
             else:
-                if self.computer:
+                if self._computer:
                     self.display_text("Computer wins!!!", RED)
                 else:
                     self.display_text("Player 2 wins!!!", RED)
@@ -221,11 +221,11 @@ class FourInARow:
         running = True
         turn = 0
         self.update_turn_text(turn)
-        if self.first_player == "computer":
+        if self._first_player == "computer":
             turn = 1
             self.update_turn_text(turn)
-            self.minmax.board = deepcopy(self.board)
-            best_pc = self.minmax.get_best_move()
+            self._minmax.board = deepcopy(self._board)
+            best_pc = self._minmax.get_best_move()
             self.move(best_pc, turn)
             turn = 1 - turn
             self.update_turn_text(turn)
@@ -235,16 +235,16 @@ class FourInARow:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN and not over:
                     if event.button == 1:
-                        if (self.move(event.pos[0] // self.window_scale, turn)
+                        if (self.move(event.pos[0] // self._window_scale, turn)
                                 != -1):
                             turn = 1 - turn
                             if self.check_game_over(turn):
                                 over = True
                                 break
                             self.update_turn_text(turn)
-                            if self.computer:
-                                self.minmax.board = deepcopy(self.board)
-                                best_pc = self.minmax.get_best_move()
+                            if self._computer:
+                                self._minmax.board = deepcopy(self._board)
+                                best_pc = self._minmax.get_best_move()
                                 self.move(best_pc, turn)
                                 turn = 1 - turn
                                 if self.check_game_over(turn):

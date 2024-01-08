@@ -50,11 +50,12 @@ class MinMax:
     Class that gives the next move of the AI based on the difficulty
 
     Attributes:
-        board (list[list[int]]): The current state of the game
-        height (int): The height of the board in cells
-        width (int): The width of the board in cells
-        depth (int): The depth of the minmax algorithm
+        _board (list[list[int]]): The current state of the game
+        _height (int): The height of the board in cells
+        _width (int): The width of the board in cells
+        _depth (int): The depth of the minmax algorithm
     """
+
     def __init__(self, board, level):
         """
         Initializes all the parameters necessary for computing next moves
@@ -62,10 +63,10 @@ class MinMax:
         :param board: The current state of the game
         :param level: The difficulty. Higher level means higher difficulty
         """
-        self.board = copy.deepcopy(board)
-        self.height = len(board)
-        self.width = len(board[0])
-        self.depth = DEPTHS[int(level) - 1]
+        self._board = copy.deepcopy(board)
+        self._height = len(board)
+        self._width = len(board[0])
+        self._depth = DEPTHS[int(level) - 1]
         pass
 
     def evaluate(self, board):
@@ -77,8 +78,8 @@ class MinMax:
         """
         rez = 0
         # principal diag
-        for i in range(self.height - 3):
-            for j in range(self.width - 3):
+        for i in range(self._height - 3):
+            for j in range(self._width - 3):
                 values = [board[i + k][j + k] for k in range(4)]
                 if PLAYER in values:
                     if not (COMPUTER in values):
@@ -87,8 +88,8 @@ class MinMax:
                     rez += WEIGHTS[values.count(COMPUTER)]
 
         # secondary diag
-        for i in range(self.height - 3):
-            for j in range(3, self.width):
+        for i in range(self._height - 3):
+            for j in range(3, self._width):
                 values = [board[i + k][j - k] for k in range(4)]
                 if PLAYER in values:
                     if not (COMPUTER in values):
@@ -97,8 +98,8 @@ class MinMax:
                     rez += WEIGHTS[values.count(COMPUTER)]
 
         # vertical
-        for i in range(self.height - 3):
-            for j in range(self.width):
+        for i in range(self._height - 3):
+            for j in range(self._width):
                 values = [board[i + k][j] for k in range(4)]
                 if PLAYER in values:
                     if not (COMPUTER in values):
@@ -107,8 +108,8 @@ class MinMax:
                     rez += WEIGHTS[values.count(COMPUTER)]
 
         # horizontal
-        for i in range(self.height):
-            for j in range(self.width - 3):
+        for i in range(self._height):
+            for j in range(self._width - 3):
                 values = [board[i][j + k] for k in range(4)]
                 if PLAYER in values:
                     if not (COMPUTER in values):
@@ -127,8 +128,8 @@ class MinMax:
                          the game, sorted from the best for the AI to the worst
         """
         boards = []
-        for j in range(self.width):
-            for i in range(self.height - 1, -1, -1):
+        for j in range(self._width):
+            for i in range(self._height - 1, -1, -1):
                 if board[i][j] is None:
                     new_board = copy.deepcopy(board)
                     new_board[i][j] = turn
@@ -145,9 +146,9 @@ class MinMax:
         """
         best_move_index = -1
         best_move_score = -sys.maxsize
-        for move, index in self.get_next_moves(self.board, COMPUTER):
+        for move, index in self.get_next_moves(self._board, COMPUTER):
             move_score = self.minmax(move,
-                                     self.depth,
+                                     self._depth,
                                      -sys.maxsize,
                                      sys.maxsize,
                                      False)
