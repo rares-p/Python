@@ -16,7 +16,7 @@ def read_input(args):
     size = len(args)
     if size < 4 or size > 5:
         print("Incorrect number of arguments. Correct usage is: 4inaROW.py <opponent type> <board width> "
-              "<board height> [firstPlayer]\nEX: 4inaROW.py computer 7 5 human\nEX: 4inaROW.py human 7 5\nOpponent "
+              "<board height> [firstPlayer]\nEX: 4inaROW.py computer2 7 5 human\nEX: 4inaROW.py human 7 5\nOpponent "
               "types are: human/computer1/computer2/computer3 (where 1 2 3 are difficulties in ascending order)")
         exit(-1)
     opponent_type = args[1]
@@ -169,7 +169,6 @@ class FourInARow:
                                     break
                                 self.update_turn_text(turn)
                 pygame.event.clear()
-                break
 
         pygame.display.update()
 
