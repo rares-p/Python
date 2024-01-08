@@ -1,5 +1,5 @@
-import copy
-import sys
+from copy import deepcopy
+from sys import argv
 import pygame
 from minmax import MinMax, is_game_over
 
@@ -49,13 +49,11 @@ class FourInARow:
         self.screen = None
         self.font = None
         self.first_player = None
-        self.second_player = None
         self.width = width
         self.height = height
         self.window_scale = 100
         self.header = 1
         self.margin = 10
-        self.text_margin = 50
         self.board = [[None for _ in range(width)] for _ in range(height)]
         if self.opponent_type == "computer":
             self.computer = True
@@ -140,7 +138,7 @@ class FourInARow:
         if self.first_player == "computer":
             turn = 1
             self.update_turn_text(turn)
-            self.minmax.board = copy.deepcopy(self.board)
+            self.minmax.board = deepcopy(self.board)
             best_pc = self.minmax.get_best_move()
             self.move(best_pc, turn)
             turn = 1 - turn
@@ -158,7 +156,7 @@ class FourInARow:
                                 break
                             self.update_turn_text(turn)
                             if self.opponent_type.startswith("computer"):
-                                self.minmax.board = copy.deepcopy(self.board)
+                                self.minmax.board = deepcopy(self.board)
                                 best_pc = self.minmax.get_best_move()
                                 self.move(best_pc, turn)
                                 turn = 1 - turn
@@ -172,6 +170,6 @@ class FourInARow:
 
 
 if __name__ == '__main__':
-    opponent, w, h, first = read_input(sys.argv)
+    opponent, w, h, first = read_input(argv)
     instance = FourInARow(opponent, w, h, first)
     instance.run()
