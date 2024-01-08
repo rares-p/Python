@@ -1,9 +1,6 @@
 import copy
 import sys
-import time
-
 import pygame
-
 from minmax import MinMax, is_game_over
 
 BLUE = (50, 98, 168)
@@ -79,9 +76,10 @@ class FourInARow:
         pygame.draw.rect(self.screen, BEIGE, (0, 0, self.window_width, self.window_header))
         for i in range(self.width):
             for j in range(self.header, self.height + self.header):
-                pygame.draw.circle(self.screen, BEIGE, (i * self.window_scale + self.window_scale // 2, j *
-                                                        self.window_scale + self.window_scale // 2),
-                                   self.window_scale / 2 - self.margin)
+                pygame.draw.circle(self.screen, BEIGE, (
+                    i * self.window_scale + self.window_scale // 2, j *
+                    self.window_scale + self.window_scale // 2),
+                    self.window_scale / 2 - self.margin)
         pygame.display.update()
 
     def move(self, x, opp):
