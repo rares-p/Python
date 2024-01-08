@@ -10,6 +10,12 @@ YELLOW = (242, 245, 66)
 
 
 def read_input(args):
+    """
+    Reads command line arguments and validates them
+
+    :param args: Contains parameters for the game session
+    :return: All the necessary data for a game session
+    """
     size = len(args)
     if size < 4 or size > 5:
         print(
@@ -46,15 +52,41 @@ def read_input(args):
         if first_player not in ["human", "computer"]:
             print("First player types are: 'human'/'computer'")
             exit(-1)
-
     return opponent_type, width, height, first_player
 
 
 class FourInARow:
+    """
+    Class that represents and updates a game session
+
+    Attributes:
+        computer (bool): Whether the second players is human or AI
+        screen (window): The pygame window
+        font (font): Font used in the pygame window
+        first_player (str): Who is the first to play in a human vs AI game
+        width (int): The width of the window
+        height (int): The height of the window
+        window_scale (int): The scale of the window
+        header (int): The size of the header
+        margin (int): The margin between cells
+        board (int): The board that represents the current state of the game
+        minmax (MinMax): Object that gives the next move of the AI based on
+                         difficulty
+        window_header (int): the width of the header in pixels
+        window_width (int): the width of the window in pixels
+        window_height (int): the height of the window in pixels
+    """
+
     def __init__(self, opponent_type: str, width: int, height: int,
                  first_player: str):
-        self.opponent_type = "human" if opponent_type == "human" \
-            else "computer"
+        """
+        Initialize a Four in a Row session
+
+        :param opponent_type: Whether the second players is human or AI
+        :param width: The width of the board in cells
+        :param height: The height of the board in cells
+        :param first_player: Who is the first to play in a human vs AI game
+        """
         self.computer = False
         self.screen = None
         self.font = None
@@ -65,7 +97,7 @@ class FourInARow:
         self.header = 1
         self.margin = 10
         self.board = [[None for _ in range(width)] for _ in range(height)]
-        if self.opponent_type == "computer":
+        if opponent_type.startswith("computer"):
             self.computer = True
             self.minmax = MinMax(self.board, opponent_type[-1])
             if first_player == "computer":
@@ -77,23 +109,39 @@ class FourInARow:
         self.initial_setup()
 
     def initial_setup(self):
+        """
+        Initializes the window and the board for the game session
+        """
         pygame.init()
         pygame.display.set_caption("4 in a row")
         self.font = pygame.font.SysFont("Comic Sans MS", 36)
-        self.screen = pygame.display.set_mode(
-            (self.window_width, self.window_height))
+        self.screen = pygame.display.set_mode((self.window_width,
+                                               self.window_height))
         self.screen.fill(BLUE)
         pygame.draw.rect(self.screen, BEIGE,
                          (0, 0, self.window_width, self.window_header))
         for i in range(self.width):
             for j in range(self.header, self.height + self.header):
-                pygame.draw.circle(self.screen, BEIGE, (
-                    i * self.window_scale + self.window_scale // 2, j *
-                    self.window_scale + self.window_scale // 2),
-                                   self.window_scale / 2 - self.margin)
+                pygame.draw.circle(self.screen, BEIGE, (i
+                                                        * self.window_scale
+                                                        + self.window_scale
+                                                        // 2,
+                                                        j
+                                                        * self.window_scale
+                                                        + self.window_scale
+                                                        // 2),
+                                   self.window_scale
+                                   / 2
+                                   - self.margin)
         pygame.display.update()
 
     def move(self, x, opp):
+        """
+        Performs the next move in the game
+
+        :param x: The column where the next piece is placed
+        :param opp: Which player performs the move
+        """
         y = None
         for i in range(self.height - 1, -1, -1):
             if self.board[i][x] is None:
@@ -107,12 +155,17 @@ class FourInARow:
             x * self.window_scale + self.window_scale // 2,
             y * self.window_scale + self.window_scale // 2 +
             self.window_header),
-            self.window_scale / 2 - self.margin)
+                           self.window_scale / 2 - self.margin)
         pygame.display.update()
 
     def update_turn_text(self, opp):
+        """
+        Computes the text in the header to specify who's turn is now
+
+        :param opp: The next player to move
+        """
         color = YELLOW if opp == 0 else RED
-        if self.opponent_type.startswith("computer"):
+        if self.computer:
             if opp == 0:
                 display_text = "Your Turn"
             else:
@@ -123,6 +176,12 @@ class FourInARow:
         pygame.display.update()
 
     def display_text(self, display_text, color):
+        """
+        Updates the text in the header to specify who's turn is now
+
+        :param display_text: The text that contains the player to move
+        :param color: The color of the player
+        """
         pygame.draw.rect(self.screen, BEIGE, (0,
                                               0,
                                               self.window_width,
@@ -134,6 +193,12 @@ class FourInARow:
         pygame.display.update()
 
     def check_game_over(self, turn):
+        """
+        Checks if the game is over. If so, it displays a message
+
+        :param turn: The next player to move
+        :return: True is the game is over, False otherwise
+        """
         if is_game_over(self.board):
             if turn:
                 if self.computer:
@@ -146,8 +211,12 @@ class FourInARow:
                 else:
                     self.display_text("Player 2 wins!!!", RED)
             return True
+        return False
 
     def run(self):
+        """
+        Simulates the game, checking for moves
+        """
         over = False
         running = True
         turn = 0
@@ -173,7 +242,7 @@ class FourInARow:
                                 over = True
                                 break
                             self.update_turn_text(turn)
-                            if self.opponent_type.startswith("computer"):
+                            if self.computer:
                                 self.minmax.board = deepcopy(self.board)
                                 best_pc = self.minmax.get_best_move()
                                 self.move(best_pc, turn)
@@ -183,7 +252,6 @@ class FourInARow:
                                     break
                                 self.update_turn_text(turn)
                 pygame.event.clear()
-
         pygame.display.update()
 
 
